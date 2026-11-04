@@ -1,0 +1,327 @@
+{
+  "run_utc": "2026-11-04 16:06 UTC",
+  "commit": "n/a",
+  "injected_defect": null,
+  "results": [
+    {
+      "test": "tests/test_alarms.py::test_occlusion_stops_motor_within_1s",
+      "title": "TC-020 Sustained occlusion stops the motor and raises OCCLUSION within 1000 ms.",
+      "requirements": [
+        "SRS-006"
+      ],
+      "outcome": "passed",
+      "duration_s": 0.002,
+      "message": ""
+    },
+    {
+      "test": "tests/test_alarms.py::test_short_pressure_peak_does_not_alarm[100]",
+      "title": "TC-021 Pressure peaks shorter than 300 ms do not raise a false occlusion alarm.",
+      "requirements": [
+        "SRS-006"
+      ],
+      "outcome": "passed",
+      "duration_s": 0.002,
+      "message": ""
+    },
+    {
+      "test": "tests/test_alarms.py::test_short_pressure_peak_does_not_alarm[250]",
+      "title": "TC-021 Pressure peaks shorter than 300 ms do not raise a false occlusion alarm.",
+      "requirements": [
+        "SRS-006"
+      ],
+      "outcome": "passed",
+      "duration_s": 0.002,
+      "message": ""
+    },
+    {
+      "test": "tests/test_alarms.py::test_door_open_stops_motor_within_100ms",
+      "title": "TC-022 Opening the door during infusion stops the motor within 100 ms.",
+      "requirements": [
+        "SRS-007"
+      ],
+      "outcome": "passed",
+      "duration_s": 0.001,
+      "message": ""
+    },
+    {
+      "test": "tests/test_alarms.py::test_near_empty_warns_and_continues",
+      "title": "TC-023 Near-empty raises a low-priority alarm and the infusion continues.",
+      "requirements": [
+        "SRS-008"
+      ],
+      "outcome": "passed",
+      "duration_s": 0.012,
+      "message": ""
+    },
+    {
+      "test": "tests/test_alarms.py::test_heartbeat_loss_enters_safe_state",
+      "title": "TC-024 Missing host heartbeat for more than 1000 ms stops the motor (COMM_LOSS).",
+      "requirements": [
+        "SRS-010"
+      ],
+      "outcome": "passed",
+      "duration_s": 0.001,
+      "message": ""
+    },
+    {
+      "test": "tests/test_alarms.py::test_steady_heartbeat_no_comm_loss",
+      "title": "TC-025 With a steady heartbeat no COMM_LOSS is raised over 30 s.",
+      "requirements": [
+        "SRS-010"
+      ],
+      "outcome": "passed",
+      "duration_s": 0.01,
+      "message": ""
+    },
+    {
+      "test": "tests/test_alarms.py::test_no_automatic_restart_after_alarm",
+      "title": "TC-026 After acknowledging an alarm the pump waits in PAUSED until RESUME.",
+      "requirements": [
+        "SRS-011"
+      ],
+      "outcome": "passed",
+      "duration_s": 0.002,
+      "message": ""
+    },
+    {
+      "test": "tests/test_alarms.py::test_alarm_stays_latched_while_cause_present",
+      "title": "TC-027 Acknowledge is refused and the alarm stays active while the occlusion persists.",
+      "requirements": [
+        "SRS-011"
+      ],
+      "outcome": "passed",
+      "duration_s": 0.002,
+      "message": ""
+    },
+    {
+      "test": "tests/test_commands.py::test_rate_boundaries[0-1]",
+      "title": "TC-001 Rate command accepted only within 0.1-500.0 mL/h (boundary values).",
+      "requirements": [
+        "SRS-001"
+      ],
+      "outcome": "passed",
+      "duration_s": 0.0,
+      "message": ""
+    },
+    {
+      "test": "tests/test_commands.py::test_rate_boundaries[1-0]",
+      "title": "TC-001 Rate command accepted only within 0.1-500.0 mL/h (boundary values).",
+      "requirements": [
+        "SRS-001"
+      ],
+      "outcome": "passed",
+      "duration_s": 0.0,
+      "message": ""
+    },
+    {
+      "test": "tests/test_commands.py::test_rate_boundaries[5000-0]",
+      "title": "TC-001 Rate command accepted only within 0.1-500.0 mL/h (boundary values).",
+      "requirements": [
+        "SRS-001"
+      ],
+      "outcome": "passed",
+      "duration_s": 0.0,
+      "message": ""
+    },
+    {
+      "test": "tests/test_commands.py::test_rate_boundaries[5001-1]",
+      "title": "TC-001 Rate command accepted only within 0.1-500.0 mL/h (boundary values).",
+      "requirements": [
+        "SRS-001"
+      ],
+      "outcome": "passed",
+      "duration_s": 0.0,
+      "message": ""
+    },
+    {
+      "test": "tests/test_commands.py::test_rate_boundaries[4294967295-1]",
+      "title": "TC-001 Rate command accepted only within 0.1-500.0 mL/h (boundary values).",
+      "requirements": [
+        "SRS-001"
+      ],
+      "outcome": "passed",
+      "duration_s": 0.0,
+      "message": ""
+    },
+    {
+      "test": "tests/test_commands.py::test_rejected_rate_keeps_active_rate",
+      "title": "TC-002 A rejected rate does not change the active infusion rate.",
+      "requirements": [
+        "SRS-001"
+      ],
+      "outcome": "passed",
+      "duration_s": 0.0,
+      "message": ""
+    },
+    {
+      "test": "tests/test_commands.py::test_vtbi_boundaries[0-2]",
+      "title": "TC-003 VTBI accepted only within 0.1-1000.0 mL (boundary values).",
+      "requirements": [
+        "SRS-002"
+      ],
+      "outcome": "passed",
+      "duration_s": 0.0,
+      "message": ""
+    },
+    {
+      "test": "tests/test_commands.py::test_vtbi_boundaries[1-0]",
+      "title": "TC-003 VTBI accepted only within 0.1-1000.0 mL (boundary values).",
+      "requirements": [
+        "SRS-002"
+      ],
+      "outcome": "passed",
+      "duration_s": 0.0,
+      "message": ""
+    },
+    {
+      "test": "tests/test_commands.py::test_vtbi_boundaries[10000-0]",
+      "title": "TC-003 VTBI accepted only within 0.1-1000.0 mL (boundary values).",
+      "requirements": [
+        "SRS-002"
+      ],
+      "outcome": "passed",
+      "duration_s": 0.0,
+      "message": ""
+    },
+    {
+      "test": "tests/test_commands.py::test_vtbi_boundaries[10001-2]",
+      "title": "TC-003 VTBI accepted only within 0.1-1000.0 mL (boundary values).",
+      "requirements": [
+        "SRS-002"
+      ],
+      "outcome": "passed",
+      "duration_s": 0.0,
+      "message": ""
+    },
+    {
+      "test": "tests/test_commands.py::test_start_rejected_when_not_ready[no_rate]",
+      "title": "TC-004 Start is refused and the motor stays off when a precondition is missing.",
+      "requirements": [
+        "SRS-003"
+      ],
+      "outcome": "passed",
+      "duration_s": 0.0,
+      "message": ""
+    },
+    {
+      "test": "tests/test_commands.py::test_start_rejected_when_not_ready[no_vtbi]",
+      "title": "TC-004 Start is refused and the motor stays off when a precondition is missing.",
+      "requirements": [
+        "SRS-003"
+      ],
+      "outcome": "passed",
+      "duration_s": 0.0,
+      "message": ""
+    },
+    {
+      "test": "tests/test_commands.py::test_start_rejected_when_not_ready[door_open]",
+      "title": "TC-004 Start is refused and the motor stays off when a precondition is missing.",
+      "requirements": [
+        "SRS-003"
+      ],
+      "outcome": "passed",
+      "duration_s": 0.0,
+      "message": ""
+    },
+    {
+      "test": "tests/test_commands.py::test_start_rejected_when_not_ready[no_syringe]",
+      "title": "TC-004 Start is refused and the motor stays off when a precondition is missing.",
+      "requirements": [
+        "SRS-003"
+      ],
+      "outcome": "passed",
+      "duration_s": 0.0,
+      "message": ""
+    },
+    {
+      "test": "tests/test_commands.py::test_start_accepted_when_ready",
+      "title": "TC-005 Start is accepted when all preconditions are met.",
+      "requirements": [
+        "SRS-003"
+      ],
+      "outcome": "passed",
+      "duration_s": 0.0,
+      "message": ""
+    },
+    {
+      "test": "tests/test_delivery.py::test_delivery_accuracy[1.0]",
+      "title": "TC-010 Delivered volume within +/-2 % over 10 min (low, mid, high, max rate).",
+      "requirements": [
+        "SRS-004"
+      ],
+      "outcome": "passed",
+      "duration_s": 0.131,
+      "message": ""
+    },
+    {
+      "test": "tests/test_delivery.py::test_delivery_accuracy[25.0]",
+      "title": "TC-010 Delivered volume within +/-2 % over 10 min (low, mid, high, max rate).",
+      "requirements": [
+        "SRS-004"
+      ],
+      "outcome": "passed",
+      "duration_s": 0.16,
+      "message": ""
+    },
+    {
+      "test": "tests/test_delivery.py::test_delivery_accuracy[100.0]",
+      "title": "TC-010 Delivered volume within +/-2 % over 10 min (low, mid, high, max rate).",
+      "requirements": [
+        "SRS-004"
+      ],
+      "outcome": "passed",
+      "duration_s": 0.154,
+      "message": ""
+    },
+    {
+      "test": "tests/test_delivery.py::test_delivery_accuracy[500.0]",
+      "title": "TC-010 Delivered volume within +/-2 % over 10 min (low, mid, high, max rate).",
+      "requirements": [
+        "SRS-004"
+      ],
+      "outcome": "passed",
+      "duration_s": 0.185,
+      "message": ""
+    },
+    {
+      "test": "tests/test_delivery.py::test_stops_at_vtbi",
+      "title": "TC-011 Motor stops at VTBI with over-delivery of at most 0.02 mL.",
+      "requirements": [
+        "SRS-005"
+      ],
+      "outcome": "passed",
+      "duration_s": 0.013,
+      "message": ""
+    },
+    {
+      "test": "tests/test_delivery.py::test_pause_stops_motor_and_resume_completes",
+      "title": "TC-012 Pause stops the motor within 100 ms; resume still ends at VTBI.",
+      "requirements": [
+        "SRS-012"
+      ],
+      "outcome": "passed",
+      "duration_s": 0.008,
+      "message": ""
+    },
+    {
+      "test": "tests/test_status.py::test_status_period",
+      "title": "TC-030 PUMP_STATUS is sent every 100 ms +/- 10 ms.",
+      "requirements": [
+        "SRS-009"
+      ],
+      "outcome": "passed",
+      "duration_s": 0.002,
+      "message": ""
+    },
+    {
+      "test": "tests/test_status.py::test_status_content",
+      "title": "TC-031 PUMP_STATUS carries state, rate and a delivered volume that tracks the reference.",
+      "requirements": [
+        "SRS-009"
+      ],
+      "outcome": "passed",
+      "duration_s": 0.005,
+      "message": ""
+    }
+  ]
+}

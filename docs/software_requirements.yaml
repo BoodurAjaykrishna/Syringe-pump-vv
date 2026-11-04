@@ -1,0 +1,65 @@
+# Software Requirements Specification (SRS) - SP-100 syringe pump control software
+# Fictional device for a verification portfolio. IEC 62304 software safety class B.
+document: SRS-SP100
+version: 1.0
+requirements:
+  - id: SRS-001
+    title: Infusion rate range
+    text: The software shall accept infusion rates from 0.1 to 500.0 mL/h in steps of 0.1 mL/h and reject any other value with result RATE_OUT_OF_RANGE without changing the active rate.
+    safety_class: B
+    risk_controls: [RC-01]
+  - id: SRS-002
+    title: Volume to be infused (VTBI) range
+    text: The software shall accept a VTBI from 0.1 to 1000.0 mL and reject any other value with result VTBI_OUT_OF_RANGE.
+    safety_class: B
+    risk_controls: [RC-01]
+  - id: SRS-003
+    title: Start preconditions
+    text: The software shall start an infusion only when rate and VTBI are set, the syringe door is closed, a syringe is detected and no high-priority alarm is active; otherwise it shall respond NOT_READY and keep the motor stopped.
+    safety_class: B
+    risk_controls: [RC-04]
+  - id: SRS-004
+    title: Delivery accuracy
+    text: At rates from 1.0 to 500.0 mL/h the delivered volume shall be within +/-2 % of the volume expected from the set rate.
+    safety_class: B
+    risk_controls: [RC-02]
+  - id: SRS-005
+    title: End of infusion
+    text: The software shall stop the motor and enter state COMPLETE when the delivered volume reaches the VTBI. Over-delivery shall not exceed 0.02 mL.
+    safety_class: B
+    risk_controls: [RC-02]
+  - id: SRS-006
+    title: Occlusion detection
+    text: When line pressure exceeds 100 kPa continuously for 300 ms, the software shall stop the motor and raise a high-priority OCCLUSION alarm no later than 1000 ms after pressure onset. Pressure peaks shorter than 300 ms shall not raise the alarm.
+    safety_class: B
+    risk_controls: [RC-03]
+  - id: SRS-007
+    title: Door open during infusion
+    text: If the syringe door opens during infusion, the software shall stop the motor within 100 ms and raise a high-priority DOOR_OPEN alarm.
+    safety_class: B
+    risk_controls: [RC-04]
+  - id: SRS-008
+    title: Near-empty syringe
+    text: When the remaining syringe volume falls below 2.0 mL, the software shall raise a low-priority NEAR_EMPTY alarm and continue the infusion.
+    safety_class: B
+    risk_controls: [RC-05]
+  - id: SRS-009
+    title: Status reporting
+    text: The software shall transmit PUMP_STATUS (0x101) every 100 ms +/- 10 ms containing state, active alarms, set rate and delivered volume.
+    safety_class: A
+    risk_controls: []
+  - id: SRS-010
+    title: Loss of communication
+    text: If no host heartbeat (0x080) is received for more than 1000 ms during infusion, the software shall stop the motor and raise a high-priority COMM_LOSS alarm.
+    safety_class: B
+    risk_controls: [RC-06]
+  - id: SRS-011
+    title: No automatic restart after alarm
+    text: High-priority alarms shall remain latched until acknowledged with their cause removed. After acknowledgement the pump shall wait in PAUSED and restart only on an explicit RESUME command.
+    safety_class: B
+    risk_controls: [RC-07]
+  - id: SRS-012
+    title: Pause and resume
+    text: PAUSE shall stop the motor within 100 ms. RESUME shall continue the infusion so that the total delivered volume still ends at the VTBI.
+    safety_class: B
+    risk_controls: [RC-02]

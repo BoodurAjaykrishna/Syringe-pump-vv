@@ -1,0 +1,90 @@
+/*@!Encoding:1252*/
+/* CANoe test module for the SP-100 pump (reference implementation).
+   Mirrors TC-020 and TC-001 from the Python suite for a physical bench:
+   - DBC: dbc/syringe_pump.dbc
+   - Line pressure is stimulated through sysvar Bench::LinePressure_kPa
+     (mapped to a pressure fixture or a VT System analog output).
+   Not executed in CI: running it needs a CANoe licence and the bench. */
+includes
+{
+}
+
+variables
+{
+  message PUMP_CMD msgCmd;
+  message PUMP_CMD_RESP msgResp;
+  message PUMP_ALARM msgAlarm;
+}
+
+/* Send a command and check the response within 100 ms. Returns the result code or -1. */
+int SendCommand(byte cmdId, dword value)
+{
+  msgCmd.Cmd_Id = cmdId;
+  msgCmd.Cmd_Value = value;
+  output(msgCmd);
+  char buf[100];
+  if (testWaitForMessage(PUMP_CMD_RESP, 100) != 1)
+  {
+    snprintf(buf, elcount(buf), "No PUMP_CMD_RESP within 100 ms for command %d", cmdId);
+    testStepFail("Command", buf);
+    return -1;
+  }
+  testGetWaitEventMsgData(msgResp);
+  return msgResp.Resp_Result;
+}
+
+void StartInfusion(dword rate01, dword vtbi01)
+{
+  if (SendCommand(1, rate01) != 0) testStepFail("Setup", "SET_RATE rejected");
+  if (SendCommand(2, vtbi01) != 0) testStepFail("Setup", "SET_VTBI rejected");
+  if (SendCommand(3, 0) != 0) testStepFail("Setup", "START rejected");
+}
+
+testcase TC_001_RateBoundaries()
+{
+  /* SRS-001: 0.1 .. 500.0 mL/h accepted, everything else RATE_OUT_OF_RANGE (1) */
+  testCaseTitle("TC-001", "Rate command boundary values");
+  if (SendCommand(1, 0) == 1)    testStepPass("0.0 mL/h", "rejected");    else testStepFail("0.0 mL/h", "not rejected");
+  if (SendCommand(1, 1) == 0)    testStepPass("0.1 mL/h", "accepted");    else testStepFail("0.1 mL/h", "not accepted");
+  if (SendCommand(1, 5000) == 0) testStepPass("500.0 mL/h", "accepted");  else testStepFail("500.0 mL/h", "not accepted");
+  if (SendCommand(1, 5001) == 1) testStepPass("500.1 mL/h", "rejected");  else testStepFail("500.1 mL/h", "not rejected");
+}
+
+testcase TC_020_OcclusionStopsMotor()
+{
+  /* SRS-006: sustained pressure > 100 kPa -> OCCLUSION alarm within 1000 ms of onset */
+  char buf[100];
+  testCaseTitle("TC-020", "Occlusion alarm within 1000 ms");
+  @sysvar::Bench::LinePressure_kPa = 20;
+  StartInfusion(1000, 1000);          /* 100.0 mL/h, 100.0 mL */
+  testWaitForTimeout(2000);
+
+  @sysvar::Bench::LinePressure_kPa = 150;
+  if (testWaitForMessage(PUMP_ALARM, 1000) != 1)
+  {
+    testStepFail("Alarm", "No PUMP_ALARM within 1000 ms of pressure onset");
+    return;
+  }
+  testGetWaitEventMsgData(msgAlarm);
+  if (msgAlarm.Alarm_Id == 1 && msgAlarm.Alarm_Priority == 2)
+    testStepPass("Alarm", "High-priority OCCLUSION received");
+  else
+  {
+    snprintf(buf, elcount(buf), "Unexpected alarm id %d / priority %d", msgAlarm.Alarm_Id, msgAlarm.Alarm_Priority);
+    testStepFail("Alarm", buf);
+  }
+
+  /* State must be ALARM (3) in the next status message */
+  if (testWaitForSignalMatch(PUMP_STATUS::Pump_State, 3, 200) == 1)
+    testStepPass("State", "Pump in ALARM state");
+  else
+    testStepFail("State", "Pump not in ALARM state");
+
+  @sysvar::Bench::LinePressure_kPa = 20;
+}
+
+void MainTest()
+{
+  TC_001_RateBoundaries();
+  TC_020_OcclusionStopsMotor();
+}

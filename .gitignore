@@ -1,0 +1,5 @@
+__pycache__/
+.pytest_cache/
+*.pyc
+defect_run.log
+reports/traces/

@@ -1,0 +1,48 @@
+VERSION "1.0"
+
+NS_ :
+	CM_
+	BA_DEF_
+	BA_
+	VAL_
+	BA_DEF_DEF_
+
+BS_:
+
+BU_: Host Pump
+
+BO_ 128 HOST_HEARTBEAT: 1 Host
+ SG_ HB_Counter : 0|8@1+ (1,0) [0|255] "" Pump
+
+BO_ 256 PUMP_CMD: 8 Host
+ SG_ Cmd_Id : 0|8@1+ (1,0) [0|7] "" Pump
+ SG_ Cmd_Value : 8|32@1+ (1,0) [0|4294967295] "" Pump
+
+BO_ 257 PUMP_STATUS: 8 Pump
+ SG_ Pump_State : 0|8@1+ (1,0) [0|4] "" Host
+ SG_ Alarm_Mask : 8|8@1+ (1,0) [0|15] "" Host
+ SG_ Set_Rate : 16|16@1+ (0.1,0) [0|500] "mL/h" Host
+ SG_ Delivered_Volume : 32|32@1+ (0.001,0) [0|1000] "mL" Host
+
+BO_ 258 PUMP_CMD_RESP: 8 Pump
+ SG_ Resp_Cmd_Id : 0|8@1+ (1,0) [0|7] "" Host
+ SG_ Resp_Result : 8|8@1+ (1,0) [0|5] "" Host
+
+BO_ 259 PUMP_ALARM: 8 Pump
+ SG_ Alarm_Id : 0|8@1+ (1,0) [0|15] "" Host
+ SG_ Alarm_Priority : 8|8@1+ (1,0) [1|2] "" Host
+
+CM_ BO_ 256 "Command from host. Cmd_Value: rate in 0.1 mL/h or VTBI in 0.1 mL";
+CM_ BO_ 257 "Cyclic pump status, 100 ms";
+CM_ SG_ 257 Alarm_Mask "Bit 0 OCCLUSION, bit 1 DOOR_OPEN, bit 2 NEAR_EMPTY, bit 3 COMM_LOSS";
+
+BA_DEF_ BO_ "GenMsgCycleTime" INT 0 65535;
+BA_DEF_DEF_ "GenMsgCycleTime" 0;
+BA_ "GenMsgCycleTime" BO_ 128 200;
+BA_ "GenMsgCycleTime" BO_ 257 100;
+
+VAL_ 256 Cmd_Id 1 "SET_RATE" 2 "SET_VTBI" 3 "START" 4 "STOP" 5 "PAUSE" 6 "RESUME" 7 "ACK_ALARM" ;
+VAL_ 257 Pump_State 0 "IDLE" 1 "INFUSING" 2 "PAUSED" 3 "ALARM" 4 "COMPLETE" ;
+VAL_ 258 Resp_Result 0 "OK" 1 "RATE_OUT_OF_RANGE" 2 "VTBI_OUT_OF_RANGE" 3 "NOT_READY" 4 "INVALID_STATE" 5 "UNKNOWN_COMMAND" ;
+VAL_ 259 Alarm_Id 1 "OCCLUSION" 2 "DOOR_OPEN" 4 "NEAR_EMPTY" 8 "COMM_LOSS" ;
+VAL_ 259 Alarm_Priority 1 "LOW" 2 "HIGH" ;

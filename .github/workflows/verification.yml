@@ -1,0 +1,38 @@
+name: Software verification
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+
+      - name: Run verification suite
+        run: python -m pytest
+
+      - name: Traceability matrix and verification report (gate)
+        if: always()
+        run: python tools/trace_report.py
+
+      - name: Prove the suite detects a seeded defect
+        if: always()
+        run: |
+          if python -m pytest -q --inject-defect late-occlusion > defect_run.log; then
+            echo "Seeded defect was NOT detected" && exit 1
+          fi
+          grep -q "FAILED tests/test_alarms.py::test_occlusion_stops_motor_within_1s" defect_run.log
+          echo "Seeded defect detected by TC-020 as expected"
+
+      - name: Upload verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: verification-evidence
+          path: reports/

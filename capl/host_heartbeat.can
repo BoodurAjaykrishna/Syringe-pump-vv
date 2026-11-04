@@ -1,0 +1,23 @@
+/*@!Encoding:1252*/
+/* Host simulation node: sends HOST_HEARTBEAT every 200 ms.
+   Toggle sysvar Bench::HeartbeatEnabled to 0 to test SRS-010 (communication loss). */
+variables
+{
+  msTimer tHeartbeat;
+  message HOST_HEARTBEAT msgHb;
+}
+
+on start
+{
+  setTimer(tHeartbeat, 200);
+}
+
+on timer tHeartbeat
+{
+  if (@sysvar::Bench::HeartbeatEnabled == 1)
+  {
+    msgHb.HB_Counter = (msgHb.HB_Counter + 1) % 256;
+    output(msgHb);
+  }
+  setTimer(tHeartbeat, 200);
+}

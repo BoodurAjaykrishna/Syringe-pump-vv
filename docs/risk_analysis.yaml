@@ -1,0 +1,59 @@
+# Risk analysis extract (ISO 14971 style) - SP-100 syringe pump
+# Illustrative only: severities and probabilities are qualitative examples.
+document: RMF-SP100
+version: 1.0
+hazards:
+  - id: HAZ-01
+    hazard: Over-infusion of drug
+    situation: Wrong rate accepted, or infusion continues after the prescribed volume
+    harm: Overdose
+    severity: Critical
+    probability_before: Occasional
+    risk_controls: [RC-01, RC-02]
+    probability_after: Improbable
+  - id: HAZ-02
+    hazard: Interrupted therapy not noticed
+    situation: Line occluded or syringe nearly empty while staff assume the drug is flowing
+    harm: Under-dose, delayed therapy
+    severity: Serious
+    probability_before: Probable
+    risk_controls: [RC-03, RC-05]
+    probability_after: Remote
+  - id: HAZ-03
+    hazard: Uncontrolled delivery
+    situation: Syringe door opened, or host link lost, while the motor keeps running
+    harm: Free flow, over- or under-dose
+    severity: Critical
+    probability_before: Remote
+    risk_controls: [RC-04, RC-06]
+    probability_after: Improbable
+  - id: HAZ-04
+    hazard: Unexpected restart
+    situation: Pump restarts by itself after an alarm while the cause is still being handled
+    harm: Unintended bolus
+    severity: Serious
+    probability_before: Remote
+    risk_controls: [RC-07]
+    probability_after: Improbable
+risk_controls:
+  - id: RC-01
+    measure: Range check of rate and VTBI commands
+    type: Software (protective measure)
+  - id: RC-02
+    measure: Volume tracking with automatic stop at VTBI, pause/resume keeps the total
+    type: Software (protective measure)
+  - id: RC-03
+    measure: Occlusion detection on line pressure with motor stop and alarm
+    type: Software (protective measure)
+  - id: RC-04
+    measure: Door interlock - no start with open door, stop on door open
+    type: Software (protective measure)
+  - id: RC-05
+    measure: Near-empty alarm before the syringe runs dry
+    type: Information for safety
+  - id: RC-06
+    measure: Heartbeat supervision with safe state on communication loss
+    type: Software (protective measure)
+  - id: RC-07
+    measure: Latched alarms and explicit RESUME required
+    type: Software (protective measure)
