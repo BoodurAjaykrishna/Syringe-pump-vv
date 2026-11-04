@@ -1,6 +1,6 @@
 # Traceability matrix - SP-100
 
-Run: 2026-11-04 16:06 UTC | Commit: n/a | Injected defect: none
+Run: 2026-11-04 16:08 UTC | Commit: e9e3ff8 | Injected defect: none
 
 ## Requirements to tests
 
